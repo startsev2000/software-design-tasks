@@ -1,55 +1,63 @@
-import java.util.Arrays;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
-    public static Scanner scanner = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in);
+    private static final Random random = new Random();
 
-    public static void firstTask() {
-        System.out.print("Input first array size: ");
-        int size = scanner.nextInt();
-        double[] array = new double[size];
+    protected static ArrayList<Student> students = new ArrayList<>();
 
-        double max = -0.1;
-        double min = 1.1;
-        for (int i = 0; i < size; ++i) {
-            array[i] = Math.random();
-            max = Math.max(array[i], max);
-            min = Math.min(array[i], min);
+    public static void fillStudentList() {
+        for (int i = 0; i < random.nextInt(35) + 2; ++i) {
+            students.add(new Student(i, "Student " + i, "Studentov " + i, "219", -1));
         }
-        Arrays.sort(array);
-        System.out.println("Average element: " + array[size / 2]);
-        System.out.println("Minimum element: " + min);
-        System.out.println("Maximum element: " + max);
-    }
-
-    public static void secondTask() {
-        System.out.print("Input second array size: ");
-        int size = scanner.nextInt();
-        int[] array = new int[size];
-        Random random = new Random();
-        System.out.print("Prime numbers: ");
-
-        for (int i = 0; i < size; ++i) {
-            array[i] = random.nextInt(99) + 2;
-            boolean isPrime = true;
-            for (int j = 2; j < array[i]; ++j) {
-                if (array[i] % j == 0) {
-                    isPrime = false;
-                    break;
-                }
-            }
-            if (isPrime) {
-                System.out.print(array[i] + " ");
-            }
-        }
-        System.out.println();
+        System.out.println("Students list successfully filled!");
     }
 
     public static void main(String[] args) {
-        firstTask();
-        System.out.print("\n----\n\n");
-        secondTask();
-        System.out.println("Program finished working!");
+        fillStudentList();
+        System.out.println("1. /r - choose random student");
+        System.out.println("2. /l - list of students with grades");
+        System.out.println("3. /end - finish program");
+
+        System.out.print(">");
+        String input = scanner.next();
+        while (true) {
+            switch (input) {
+                case "/r" -> {
+                    int randomId = random.nextInt(students.size());
+                    if (students.get(randomId).getGrade() == 0) {
+                        System.out.println("Student " + students.get(randomId).getLastName() + " is answering:");
+                        System.out.println("Is he in the class? y/n");
+                        String answer = scanner.next();
+                        if (answer.equals("y") || answer.equals("yes")) {
+                            System.out.println("Grade for the answer: ");
+                            int grade = scanner.nextInt();
+                            students.get(randomId).setGrade(grade);
+                            System.out.println("Grade saved!");
+                        } else if (answer.equals("n") || answer.equals("no")) {
+                            System.out.println("Student " + students.get(randomId).getLastName() + " is absent!");
+                            students.get(randomId).setGrade(0);
+                        } else {
+                            System.out.println("Incorrect command!");
+                        }
+                    } else {
+                        System.out.println("Student " + students.get(randomId).getLastName() + " already answered!");
+                        System.out.println("Choose another student with /r.");
+                    }
+
+                }
+                case "/l" -> {
+                    for (Student student : students) {
+                        System.out.println(student);
+                    }
+                }
+                case "/end" -> {
+                    System.out.println("Program finished working!");
+                    return;
+                }
+            }
+            System.out.print(">");
+            input = scanner.next();
+        }
     }
 }
