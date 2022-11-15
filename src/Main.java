@@ -7,7 +7,8 @@ public class Main {
     protected static ArrayList<Student> students = new ArrayList<>();
 
     public static void fillStudentList() {
-        for (int i = 0; i < random.nextInt(35) + 2; ++i) {
+        int amountOfStudents = random.nextInt(35) + 2;
+        for (int i = 0; i < amountOfStudents; ++i) {
             students.add(new Student(i, "Student " + i, "Studentov " + i, "219", -1));
         }
         System.out.println("Students list successfully filled!");
@@ -25,7 +26,7 @@ public class Main {
             switch (input) {
                 case "/r" -> {
                     int randomId = random.nextInt(students.size());
-                    if (students.get(randomId).getGrade() == 0) {
+                    if (students.get(randomId).getGrade() == -1) {
                         System.out.println("Student " + students.get(randomId).getLastName() + " is answering:");
                         System.out.println("Is he in the class? y/n");
                         String answer = scanner.next();
